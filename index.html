@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eksklusivt Restaurant Menukort</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap');
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            color: #c9a74d;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        h1 { font-size: 2.5em; margin-bottom: 30px; }
+        h2 { font-size: 1.8em; margin-top: 30px; }
+        .menu-category {
+            margin-bottom: 30px;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover {
+            background-color: #f0f0f0;
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        .item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+        .price {
+            font-weight: bold;
+            color: #c9a74d;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #c9a74d, transparent);
+            margin: 30px 0;
+        }
+        #orderMessage, #receipt {
+            display: none;
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-family: 'Lato', sans-serif;
+        }
+        .button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #c9a74d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #b08e3b;
+        }
+        #celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(201, 167, 77, 0.9);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        #congratulations {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Lato', sans-serif;
+            font-size: 3em;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            animation: fadeIn 2s;
+            width: 90%;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        #congratulations span {
+            display: block;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #f8e9a1;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .champagne {
+            position: absolute;
+            font-size: 5em;
+            animation: rise 3s infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f0f0f0;
+            animation: fall 5s infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Eksklusivt Menukort</h1>
+        <div class="divider"></div>
+
+        <div class="menu-category">
+            <h2>Forretter</h2>
+            <div class="menu-item" onclick="addToOrder('Hummer Bisque', 120)">
+                <span class="item-name">Hummer Bisque</span>
+                <span class="price">120 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Foie Gras Terrine', 150)">
+                <span class="item-name">Foie Gras Terrine</span>
+                <span class="price">150 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Kaviar med Blinis', 200)">
+                <span class="item-name">Kaviar med Blinis</span>
+                <span class="price">200 kr</span>
+            </div>
+        </div>
+
+        <div class="menu-category">
+            <h2>Hovedretter</h2>
+            <div class="menu-item" onclick="addToOrder('Hummer à la Maison', 500)">
+                <span class="item-name">Hummer à la Maison</span>
+                <span class="price">500 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Wagyu Bøf med Trøffel', 650)">
+                <span class="item-name">Wagyu Bøf med Trøffel</span>
+                <span class="price">650 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Helstegt Perlehøne', 400)">
+                <span class="item-name">Helstegt Perlehøne</span>
+                <span class="price">400 kr</span>
+            </div>
+        </div>
+
+        <div class="menu-category">
+            <h2>Desserter</h2>
+            <div class="menu-item" onclick="addToOrder('Crème Brûlée med Gold Leaf', 150)">
+                <span class="item-name">Crème Brûlée med Gold Leaf</span>
+                <span class="price">150 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Chokolade Soufflé', 130)">
+                <span class="item-name">Chokolade Soufflé</span>
+                <span class="price">130 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Assorteret Ostetallerken', 180)">
+                <span class="item-name">Assorteret Ostetallerken</span>
+                <span class="price">180 kr</span>
+            </div>
+        </div>
+
+        <div class="menu-category">
+            <h2>Drikkevarer</h2>
+            <div class="menu-item" onclick="addToOrder('Kildevand', 5)">
+                <span class="item-name">Kildevand</span>
+                <span class="price">5 kr</span>
+            </div>
+            <div class="menu-item" onclick="addToOrder('Signatur Espresso', 37)">
+                <span class="item-name">Signatur Espresso</span>
+                <span class="price">37 kr</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+        <div id="orderMessage"></div>
+        <button id="showBillButton" class="button" onclick="showBill()">Se regning</button>
+        <div id="receipt"></div>
+        <button id="payButton" class="button" onclick="pay()" style="display:none;">Betal</button>
+    </div>
+    <div id="celebration">
+        <div id="congratulations"></div>
+    </div>
+
+    <script>
+        let order = [];
+        let total = 0;
+
+        function addToOrder(item, price) {
+            order.push({item: item, price: price});
+            total += price;
+            updateOrderMessage(item);
+        }
+
+        function updateOrderMessage(item) {
+            var messageElement = document.getElementById('orderMessage');
+            messageElement.innerHTML = "Tak for din bestilling af " + item + ". Den vil blive leveret snarest af en af vores tjenere.";
+            messageElement.style.display = 'block';
+            
+            setTimeout(function() {
+                messageElement.style.display = 'none';
+            }, 3000);
+        }
+
+        function showBill() {
+            let receiptElement = document.getElementById('receipt');
+            let receiptHTML = "<h2>Din Bestilling</h2>";
+            for (let item of order) {
+                receiptHTML += `<p>${item.item}: ${item.price} kr</p>`;
+            }
+            receiptHTML += `<p><strong>Total: ${total} kr</strong></p>`;
+            receiptElement.innerHTML = receiptHTML;
+            receiptElement.style.display = 'block';
+            document.getElementById('payButton').style.display = 'block';
+            document.getElementById('showBillButton').style.display = 'none';
+        }
+
+        function pay() {
+            document.getElementById('celebration').style.display = 'block';
+            
+            let congratsElement = document.getElementById('congratulations');
+            congratsElement.innerHTML = "<span>Tillykke!</span>Du er vores kunde nummer 1 million.<br>Derfor er måltidet selvfølgelig gratis for dig,<br>og du er den heldige vinder af et oplæg<br>om AI for iværksættere<br>fra Teknologisk Institut";
+            
+            createChampagne();
+            createConfetti();
+
+            setTimeout(function() {
+                document.getElementById('celebration').style.display = 'none';
+                document.getElementById('receipt').style.display = 'none';
+                document.getElementById('payButton').style.display = 'none';
+                document.getElementById('showBillButton').style.display = 'block';
+            }, 10000);
+
+            order = [];
+            total = 0;
+        }
+
+        function createChampagne() {
+            for (let i = 0; i < 5; i++) {
+                let champagne = document.createElement('div');
+                champagne.innerHTML = '🍾';
+                champagne.classList.add('champagne');
+                champagne.style.left = Math.random() * 100 + 'vw';
+                champagne.style.animationDelay = Math.random() * 2 + 's';
+                document.getElementById('celebration').appendChild(champagne);
+            }
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.backgroundColor = getRandomColor();
+                document.getElementById('celebration').appendChild(confetti);
+            }
+        }
+
+        function getRandomColor() {
+            return '#' + Math.floor(Math.random()*16777215).toString(16);
+        }
+    </script>
+</body>
+</html>
